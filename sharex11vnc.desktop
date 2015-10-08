@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=sharex11vnc
+Comment=starts_vnc_server
+Exec=/usr/local/bin/sharex11vnc
+Terminal=true
+Hidden=false
+X-KeepTerminal=true
+Path=/usr/local/bin/
+Name[en_US]=sharex11vnc
