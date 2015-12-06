@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <string.h>
+#include "globals.h"
 
 bool isNumeric(string line)
 {
@@ -69,11 +70,19 @@ int CreateOutputDir()
     char dateid[21];
     char addnumstr[4];
     outdir = "/media/doas/DATA/";
+
+    // lock mutex for gps variables
     pthread_mutex_lock(&gpslock);
+
     sprintf(dateid, "%04d-%02d-%02dT%02d-%02d-%02dZ", Year, Month, Day, Hour, Minute, int(round(Second)));
+
+    // unlock mutex for gps variables
     pthread_mutex_unlock(&gpslock);
+
     outdir += dateid;
     //printf("dir to make: %s\n", outdir.c_str());
+
+    // check for unique file name, append addnum if already exists
     if (dirExists(outdir.c_str()) == 1)
     {
         while (1)
@@ -181,7 +190,7 @@ int WriteStdFile()
         fprintf(stream, "%f\n", Spectrum[i]);
     }
     fprintf(stream, "spec%06lu\n\n\n", CurrentFileNumber);
-    pthread_mutex_lock(&gpslock);
+//    pthread_mutex_lock(&gpslock);
     fprintf(stream, "%02d/%02d/%04d\n", Month, Day, Year);
     fprintf(stream, "%02d:%02d:%02d\n", Hour, Minute, int(round(Second)));
     fprintf(stream, "%02d:%02d:%02d\n", Hour, Minute, int(round(Second)));
@@ -204,7 +213,7 @@ int WriteStdFile()
     fprintf(stream, "Course = %lf\n", Course);
     fprintf(stream, "GPSQuality = %d\n", Quality);
     fprintf(stream, "GPSWarnCode = %c\n", WarnCode);
-    pthread_mutex_unlock(&gpslock);
+//    pthread_mutex_unlock(&gpslock);
     fprintf(stream, "Name = spec%06lu\n", CurrentFileNumber);
     fprintf(stream, "NChannels = %d\n", Pixels);
     fprintf(stream, "Filename = %s\n", outfile.c_str());
@@ -214,6 +223,58 @@ int WriteStdFile()
         CurrentFileNumber++;
     }
     return 0;
+}
+
+/*
+ * int transmitRadioData()
+ * This transmits the latest spectrum and GPS data packaged in a RadioData struct (see globals.h).
+ * Returns: the number of bytes transmitted, or -1 if there was an error.
+ * Since RadioManager will compress data before sending the number of bytes
+ * sent is not guaranteed to equal the sizeof(RadioData)
+
+ * Usage notes:
+ * Both the gps and spectrometer mutex (gpslock, speclock) must be acquired before calling this function
+ * RadioManager::setUpSerial() must be called and have returned 0
+ * (indicating successful setup) before using the following function
+
+ * Like WriteStdFile(), this function does not check mutex for the data it accesses.
+ * This is because it is called from AcquireSpectrum(int, int) in cspectrometer.cpp
+ * immediately after WriteStdFile() is called inside the mutex lock issued to AcquireSpectrum(int,int)
+
+ * The microDOAS Ground Station is programmed to correctly parse the
+ * bytes sent back into a struct. Since the alignment of the memory within a
+ * struct is not guaranteed to be the same on all compilers and all systems,
+ * recompiling this code on a different machine may change how the struct is saved.
+ * If this is the case, the ground station may not parse the struct correctly.
+ *
+ */
+int transmitRadioData(){
+    RadioData data;
+    // populate data
+    for(int i = 0; i < NUM_PIXELS; i++){
+        data.spec[i] = Spectrum[i];
+    }
+    data.fileNum = CurrentFileNumber;
+    data.exposureTime = ExposureTime;
+    data.numExposures = NumExposures;
+    data.lat = Latitude;
+    data.lon = Longitude;
+    data.alt = Altitude;
+    data.speed = Speed;
+    data.course = Course;
+    data.num_sats = Satellites;
+    data.quality = Quality;
+    data.year = Year;
+    data.month = Month;
+    data.day = Day;
+    data.hour = Hour;
+    data.minute = Minute;
+    data.second = Second;
+    data.warnCode = WarnCode;
+
+
+    // send data and return number of bytes sent
+    return radio.sendCompressed((byte*)(&data),sizeof(RadioData));
 }
 
 void* start_CheckShutdownSwitch(void *arg)
@@ -230,6 +291,9 @@ void* start_CheckShutdownSwitch(void *arg)
         fclose(stream);
         if (switchstate == 1)
         {
+            // close radio NOTE might need a radio mutex for this.
+            //radio.closeSerial();
+
             switchstr = "echo doas | sudo -S poweroff";
             system(switchstr.c_str());
         }

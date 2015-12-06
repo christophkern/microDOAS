@@ -69,7 +69,7 @@ RadioManager radio;
 struct RadioData{
     // spectrometer data
     int fileNum;
-    float spec[NUM_PIXELS];
+    double spec[NUM_PIXELS];
     int exposureTime;
     int numExposures;
 

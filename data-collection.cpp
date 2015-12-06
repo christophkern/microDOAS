@@ -73,6 +73,7 @@
 #include "gpsparser.cpp"
 #include "toolbox.cpp"
 #include "cspectrometer.cpp"
+#include "radiomanager.cpp"
 //#include "BBBiolib.h"
 #include "leds.cpp"
 
@@ -222,6 +223,10 @@ int main()
     }
 
     CreateOutputDir();
+
+    // set up the radio
+    int serialErrorCode = radio.setUpSerial();
+    printf("(0 means OK) setUpSerial error code: %d \n", serialErrorCode);
 
     // start acquiring spectra
     printf("Starting spectral acquisition...\n");

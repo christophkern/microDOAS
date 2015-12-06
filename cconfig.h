@@ -5,6 +5,7 @@
 
 using namespace std;
 
+// the following structs hold the xml params
 struct SSpectrometer
 {
     int MaxExposureTime;
@@ -34,6 +35,7 @@ struct SGeneral
     int ZipInterval;
 };
 
+// reads xml file and stores config params
 class CConfig
 {
     public:

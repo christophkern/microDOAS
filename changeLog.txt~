@@ -1,0 +1,14 @@
+All places where code has been altered by Adam Levy will be listed below.
+
+Change log for microDOAS:
+radiomanager.cpp and .h files added to project, included in globals.h (line 6)
+
+transmitRadioData() function added to toolbox.cpp (line 228)
+
+radio.setUpSerial(); function call added to data-collection.cpp (line 227)
+
+radio.closeSerial(); function call added to start_CheckShutdownSwitch(void *arg) in toolbox.cpp (line 247) // currently commented out
+
+
+
+

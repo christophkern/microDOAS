@@ -345,6 +345,7 @@ int parsedata(char *nmeastring)
     Longitude = gpgga.longitude;
     Altitude = gpgga.altitude;
     Quality = gpgga.qualitycode;
+    Satellites = gpgga.satellites;
     pthread_mutex_unlock(&gpslock);
   }
   else if(nmea_cmd_type == NMEA_GPRMC)

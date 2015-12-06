@@ -4,6 +4,7 @@ void* start_gpsled(void *arg)
 {
     while (1)
     {
+        // blinks only if Time has changed since the last blink
         if (LEDTime != Time)
         {
             LEDTime = Time;

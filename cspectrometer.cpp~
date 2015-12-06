@@ -468,6 +468,9 @@ int AcquireSpectrum(int exptime, int numexp)
             ReadyToZip = 1;
         }
     }
+    cout << "sleeping " << endl;
+    usleep(10000);
+    cout << "I slept" << endl;
     return 0;
 }
 
