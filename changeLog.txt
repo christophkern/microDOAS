@@ -1,0 +1,18 @@
+All places where microDOAS code has been altered by Adam Levy will be listed below.
+Note: the line numbers listed may not be accurate but should be close.
+
+Change log for microDOAS:
+radiomanager.cpp and .h files added to project, included in globals.h (line 6)
+
+transmitRadioData() function added to toolbox.cpp (line 240)
+
+radio.setUpSerial(); function call added to data-collection.cpp (line 227)
+
+radio.closeSerial(); function call added to start_CheckShutdownSwitch(void *arg) in toolbox.cpp (line 247) // currently commented out
+
+added int Satellites to globals.h (line 40)
+	to hold the number of satellites
+added line to update int Satellites in gpsparser.cpp (line 348)
+
+Declared a RadioManager object called 'radio' in globals.h (line 68)
+

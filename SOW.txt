@@ -1,0 +1,19 @@
+microDOAS Ground Control Station (GCS):
+- Connect to microDOAS unit via RFD900 radios
+- Display live status of microDOAS:
+	- GPS: position acquired, # satelites, lat, lon, alt, displayed as text
+	- seabreeze status mode: Acquiring data, dark/light mode, calibrating
+	- XBee signal strength
+- Accept compressed/reduced data stream of seaBreeze spectrum intensities and
+	save them in standard .stp format
+
+microDOAS code:
+- Interface with Xbees
+- Connect to GCS
+- Transmit data listed above
+- Updated XML config file to speficy:
+	- which frequency ranges to transmit
+	- at what frequency to transmit data
+
+Reach goal:
+- Allow GCS to send poweroff, restart signals
