@@ -29,6 +29,12 @@ int CConfig::ReadXML()
         else
         {
             printf("ERROR: No configuration file found!");
+            // seems like allowing the code to proceed here could cause a crash
+            // consider loading hard coded defaults or just returning 0;
+            // It appears that any comments in the xml file will cause the program to just exit.
+            // Any errors in the xml file could go undetected and cause unexpected behavior.
+            // Just thought I'd mention it so you can fix that at some point if you feel the need.
+            // - Adam Levy
         }
     }
     string v;
@@ -66,6 +72,59 @@ int CConfig::ReadXML()
     General.DeleteRawSpectraAfterZip = atoi(v.c_str());
     v = GetPropertyValue(&doc, "General", "ZipInterval");
     General.ZipInterval = atoi(v.c_str());
+
+    // radio transmit settings
+    v = GetPropertyValue(&doc, "Radio", "SendEveryNthSTDFile");
+    Radio.SendEveryNth = atoi(v.c_str());
+    v = GetPropertyValue(&doc, "Radio", "NumSpecRegions");
+    int numSpecRegions = atoi(v.c_str());
+    for(int i = 0; i < numSpecRegions; i++){
+        string index = std::to_string(i);
+        string startTag = "StartSpec" + index;
+        string endTag = "EndSpec" + index;
+        v = GetPropertyValue(&doc, "Radio", startTag);
+        Radio.start.push_back(atoi(v.c_str()));
+        v = GetPropertyValue(&doc, "Radio", endTag);
+        Radio.end.push_back(atoi(v.c_str()));
+    }
+
+    // check that spectrum regions are valid
+    bool ok = true;
+    for(int i = 0; i < numSpecRegions; i++){
+        // valid values are 0-2047
+        if( !( 0 <= Radio.start[i] && Radio.start[i] < 2048 ) ||
+            !( 0 <= Radio.end[i] && Radio.end[i] < 2048 ) ){
+            ok = false;
+            break;
+        }
+        // for any given region the start must be less than or equal to the end
+        if( !( Radio.start[i] <= Radio.end[i] ) ){
+            ok = false;
+            break;
+        }
+        if( i > 0 ){
+            // the end of the previous region must be less than or equal to the start of this region
+            if( !( Radio.end[i-1] <= Radio.start[i] ) ){
+                ok = false;
+                break;
+            }
+        }
+    }
+
+    // if the specified regions aren't okay then transmit all spectrum
+    if(!ok){
+        printf( "Spectrum regions in XML file are invalid. \nDefaulting to sending entire spectrum. \n");
+        Radio.start.clear();
+        Radio.end.clear();
+        Radio.start.push_back(0);
+        Radio.end.push_back(2047);
+    }
+    printf( "Transmitting the following spectra channels: \n");
+    for( unsigned int i = 0; i < Radio.start.size(); i++ ){
+        printf("\t %i - %i \n", Radio.start[i], Radio.end[i]);
+    }
+
+
     return 1;
 }
 

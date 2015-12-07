@@ -18,4 +18,17 @@ Declared a RadioManager object called 'radio' in globals.h (line 68)
 
 WriteStdFile() acquired a mutex lock for the gps inside of the function (line 193). To be consistent between this and the transmitRadioData(), I removed that lock and put it in the calling function. This guarantees that WriteStdFile() and transmitRadioData() use the same gps data. The locks for the spectrometer and the gps are now aquired in the AcquireSpectrum() (line 439) function in cspectrometer.cpp.
 
+added a comment you might want to look at in cconfig.cpp (line 32)
+
+added tags to .xml file that control how frequently the .std file is sent and what frequencies are transmitted. see comments in microDOAS.xml
+
+added struct SRadio to hold radio settings in cconfig.h
+
+altered CConfig::ReadXML to load radio settings in cconfig.cpp (line 73)
+
+added -std=c++11 to CPPFLAGS in seabreeze/common.mk (line 72) I did this so I could use std::to_string(int )
+
+changed my function transmitRadioData to omit spectra not specified in xml to reduce transmitted data size
+
+changed my RadioData struct to only use floats and to put the Spectrum at the end
 

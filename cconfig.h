@@ -1,6 +1,7 @@
 #ifndef CCONFIG_H
 #define CCONFIG_H
 #include <string>
+#include <vector>
 #include "tinyxml.h"
 
 using namespace std;
@@ -35,6 +36,13 @@ struct SGeneral
     int ZipInterval;
 };
 
+struct SRadio
+{
+    int SendEveryNth;
+    vector<int> start;
+    vector<int> end;
+};
+
 // reads xml file and stores config params
 class CConfig
 {
@@ -42,6 +50,7 @@ class CConfig
     SSpectrometer Spectrometer;
     SGPS GPS;
     SGeneral General;
+    SRadio Radio;
 
     public:
     int ReadXML();

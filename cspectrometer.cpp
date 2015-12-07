@@ -454,8 +454,14 @@ int AcquireSpectrum(int exptime, int numexp)
     Saturation = SpecMax(Spectrum, Pixels) / (MaxIntensity * NumExposures);
     printf("Acquired spectrum: ExpTime [%d] | NumExp [%d] | Saturation [%.2f]\n", ExposureTime, NumExposures, Saturation);
     WriteStdFile();
-    int bytesSent = transmitRadioData();
-    printf("Sent %d bytes \n", bytesSent);
+    static int sendEveryNth = cfg.Radio.SendEveryNth; // static since it only needs to load once
+    if(sendEveryNth > 0){
+        if( 0 == CurrentFileNumber%sendEveryNth ){
+            int bytesSent = transmitRadioData();
+            printf("Sent spectrum %ld in %d bytes \n", (CurrentFileNumber-1), bytesSent);
+            exit(0);
+        }
+    }
     pthread_mutex_unlock(&gpslock);
     pthread_mutex_unlock(&speclock);
     printf("Saved spectrum %ld.\n", (CurrentFileNumber - 1));

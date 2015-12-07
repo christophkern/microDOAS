@@ -66,19 +66,14 @@ unsigned long ZipStartFileNumber = 0;
 // RADIO
 RadioManager radio;
 // holds all radioData;
+// changing this will mess up how the ground station parses data
 struct RadioData{
-    // spectrometer data
-    int fileNum;
-    float spec[NUM_PIXELS];
-    int exposureTime;
-    int numExposures;
-
     // gps data
-    double lat;
-    double lon;
-    double alt;
-    double speed;
-    double course;
+    float lat;
+    float lon;
+    float alt;
+    float speed;
+    float course;
     int num_sats;
     int quality;
     int year;
@@ -86,8 +81,14 @@ struct RadioData{
     int day;
     int hour;
     int minute;
-    double second;
+    float second;
     char warnCode;
+
+    // spectrometer data
+    int fileNum;
+    int exposureTime;
+    int numExposures;
+    float spec[NUM_PIXELS];
 };
 
 #endif // GLOBALS_H

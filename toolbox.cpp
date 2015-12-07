@@ -251,12 +251,23 @@ int WriteStdFile()
 int transmitRadioData(){
     RadioData data;
     // populate data
+    int shifted = 0;
+    //unsigned int dummy = 0;
     for(int i = 0; i < NUM_PIXELS; i++){
-        data.spec[i] = Spectrum[i];
+        bool send = false;
+        // check if the index i is in the specified spectra ranges
+        for( unsigned int j = 0; j < cfg.Radio.start.size(); j++ ){
+            if( cfg.Radio.start[j] <= i && i <= cfg.Radio.end[j] ){
+                send = true;
+            }
+        }
+        if(send){
+            data.spec[shifted] = Spectrum[i];
+            //memcpy(data.spec+shifted,&dummy,sizeof(float));
+            dummy++;
+            shifted++;
+        }
     }
-    data.fileNum = CurrentFileNumber;
-    data.exposureTime = ExposureTime;
-    data.numExposures = NumExposures;
     data.lat = Latitude;
     data.lon = Longitude;
     data.alt = Altitude;
@@ -271,10 +282,15 @@ int transmitRadioData(){
     data.minute = Minute;
     data.second = Second;
     data.warnCode = WarnCode;
+    data.fileNum = CurrentFileNumber;
+    data.exposureTime = ExposureTime;
+    data.numExposures = NumExposures;
 
 
     // send data and return number of bytes sent
-    return radio.sendCompressed((byte*)(&data),sizeof(RadioData));
+    long numBytes = sizeof(RadioData) - sizeof(float)*(NUM_PIXELS - shifted);
+    //return radio.send((byte*)(&data),numBytes);
+    return radio.sendCompressed((byte*)(&data),numBytes);
 }
 
 void* start_CheckShutdownSwitch(void *arg)

@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<microDOAS>	
+	<Spectrometer>		
+		<MaxExposureTime>1000</MaxExposureTime>
+                <MinExposureTime>10</MinExposureTime>
+		<TargetIntegrationTime>1000</TargetIntegrationTime>
+                <TargetSaturation>0.7</TargetSaturation>
+                <MaxSaturation>0.9</MaxSaturation>
+                <MinSaturation>0.5</MinSaturation>
+		<AutoDetectDark>1</AutoDetectDark>
+		<DarkSaturation>0.15</DarkSaturation>
+		<OffsetExpTime>5</OffsetExpTime>
+		<DarkCurrentExpTime>20000</DarkCurrentExpTime>
+	</Spectrometer>
+	<GPS>
+                <UseGPS>1</UseGPS>
+                <TTYPort>USB0</TTYPort>
+		<WaitForLockOnStartup>0</WaitForLockOnStartup>
+		<BaudRate>4800</BaudRate>
+	</GPS>
+	<General>
+		<ZipSpectra>1</ZipSpectra>
+		<DeleteRawSpectraAfterZip>1</DeleteRawSpectraAfterZip>
+        <ZipInterval>1000</ZipInterval>
+    </General>
+    <Radio>
+        <!-- 0 or less will disable transmitting data, 1 will send every std file, 2 will send every other std file, 3 every 3rd ... -->
+        <SendEveryNthSTDFile>1</SendEveryNthSTDFile>
+        <!-- The NumSpecRegions must match the number of continuous
+             spectrum regions you wish to transmit. 
+             If the NumSpecRegions is less than the number listed, the highest indexed regions will be omitted 
+             If the NumSpecRegions is greater than the number listed, then they will be ignored and all spectrum will be transmitted -->
+        <NumSpecRegions>1</NumSpecRegions>
+        <!-- Each spec region must have StartSpecN and EndSpecN tags, where N is the index from 0
+             They must be in ascending order according to their index and region 
+             Valid region numbers are 0-2047
+             For example, 0-1000 must come before 1100 - 2047 and they must have indexes 0 and 1, respectively:
+                <StartSpec0>0</StartSpec0>
+                <EndSpec0>1000</EndSpec0>
+                <StartSpec1>1100</StartSpec1>
+                <EndSpec1>2047</EndSpec1> 
+             Invaid settings will result in all spectrum being transmitted -->
+        <StartSpec0>0</StartSpec0>
+        <EndSpec0>2047</EndSpec0>
+    </Radio>
+</microDOAS>
