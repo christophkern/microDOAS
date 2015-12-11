@@ -74,21 +74,22 @@ struct RadioData{
     float alt;
     float speed;
     float course;
-    int num_sats;
-    int quality;
-    int year;
-    int month;
-    int day;
-    int hour;
-    int minute;
-    float second;
+    // none of these numbers will be bigger than 255
+    unsigned char num_sats;
+    unsigned char quality;
+    unsigned char year;
+    unsigned char month;
+    unsigned char day;
+    unsigned char hour;
+    unsigned char minute;
+    unsigned char darkMode;
+    unsigned char second;
     char warnCode;
 
     // spectrometer data
-    int fileNum;
-    int exposureTime;
-    int numExposures;
+    unsigned long fileNum;
+    short exposureTime;
+    unsigned char numExposures;
     float spec[NUM_PIXELS];
 };
-
 #endif // GLOBALS_H

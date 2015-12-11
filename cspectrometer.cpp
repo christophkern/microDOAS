@@ -456,10 +456,9 @@ int AcquireSpectrum(int exptime, int numexp)
     WriteStdFile();
     static int sendEveryNth = cfg.Radio.SendEveryNth; // static since it only needs to load once
     if(sendEveryNth > 0){
-        if( 0 == CurrentFileNumber%sendEveryNth ){
+        if( 0 == (CurrentFileNumber-1)%sendEveryNth || DarkInProgress > 0){
             int bytesSent = transmitRadioData();
             printf("Sent spectrum %ld in %d bytes \n", (CurrentFileNumber-1), bytesSent);
-            exit(0);
         }
     }
     pthread_mutex_unlock(&gpslock);

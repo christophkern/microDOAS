@@ -1,6 +1,6 @@
 #include "radiomanager.h"
 
-RadioManager::RadioManager(): HEADER(0xFAfaFAfa), HEADER_SIZE(sizeof(long))
+RadioManager::RadioManager(): HEADER(0xFAebDCcd), HEADER_SIZE(sizeof(long))
 {
     m_ttyPortName = "/dev/tty";
     m_ttyPortName += DEFAULT_TTY_PORT_NAME;
@@ -12,9 +12,6 @@ int RadioManager::setUpSerial()
     m_fd = open(m_ttyPortName.c_str(), O_RDWR | O_NOCTTY );
 
     if(m_fd < 0){
-        // handle the error
-        // handle the error
-        // handle the error
         return OPEN_FAIL;
     }
 
@@ -57,7 +54,7 @@ int RadioManager::setUpSerial()
         return CONFIG_APPLY_FAIL;
     }
 
-    return 0;
+    return OPEN_SUCCESS;
 }
 
 int RadioManager::closeSerial()

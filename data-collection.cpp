@@ -226,7 +226,29 @@ int main()
 
     // set up the radio
     int serialErrorCode = radio.setUpSerial();
-    printf("(0 means OK) setUpSerial error code: %d \n", serialErrorCode);
+    string error = "Radio/serial error: ";
+    switch(serialErrorCode){
+        case OPEN_SUCCESS:
+            cout << "Radio/serial: open success\n";
+            break;
+        case OPEN_FAIL:
+            cout << error << serialErrorCode << "failed to open port\n";
+            break;
+        case NOT_A_TTY:
+            cout << error << serialErrorCode << "not a tty port\n";
+            break;
+        case GET_CONFIG_FAIL:
+            cout << error << serialErrorCode << "failed to copy previous config settings\n";
+            break;
+        case BAUD_FAILED:
+            cout << error << serialErrorCode << "failed to apply baud rate\n";
+            break;
+        case CONFIG_APPLY_FAIL:
+            cout << error << serialErrorCode << " failed to apply config settings\n";
+            break;
+        default:
+            cout << error << serialErrorCode << "unknown error\n";
+    }
 
     // start acquiring spectra
     printf("Starting spectral acquisition...\n");

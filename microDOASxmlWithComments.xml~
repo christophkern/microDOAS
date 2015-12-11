@@ -14,7 +14,7 @@
 	</Spectrometer>
 	<GPS>
                 <UseGPS>1</UseGPS>
-                <TTYPort>S2</TTYPort>
+                <TTYPort>USB0</TTYPort>
 		<WaitForLockOnStartup>0</WaitForLockOnStartup>
 		<BaudRate>4800</BaudRate>
 	</GPS>

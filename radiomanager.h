@@ -4,6 +4,7 @@
 #define DEFAULT_TTY_PORT_NAME "USB0"
 
 // set up serial error codes
+#define OPEN_SUCCESS        0x00
 #define OPEN_FAIL           0x01
 #define NOT_A_TTY           0x02
 #define GET_CONFIG_FAIL     0x04

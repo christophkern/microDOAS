@@ -252,7 +252,6 @@ int transmitRadioData(){
     RadioData data;
     // populate data
     int shifted = 0;
-    //unsigned int dummy = 0;
     for(int i = 0; i < NUM_PIXELS; i++){
         bool send = false;
         // check if the index i is in the specified spectra ranges
@@ -263,8 +262,6 @@ int transmitRadioData(){
         }
         if(send){
             data.spec[shifted] = Spectrum[i];
-            //memcpy(data.spec+shifted,&dummy,sizeof(float));
-            dummy++;
             shifted++;
         }
     }
@@ -285,6 +282,7 @@ int transmitRadioData(){
     data.fileNum = CurrentFileNumber;
     data.exposureTime = ExposureTime;
     data.numExposures = NumExposures;
+    data.darkMode = DarkInProgress;
 
 
     // send data and return number of bytes sent
