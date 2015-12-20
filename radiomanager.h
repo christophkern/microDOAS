@@ -49,6 +49,7 @@ private:
     string m_ttyPortName;
     CRC32 m_crc;
     const ulong HEADER;
+    const ulong FOOTER;
     const ulong HEADER_SIZE;
 };
 

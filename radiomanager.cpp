@@ -1,6 +1,6 @@
 #include "radiomanager.h"
 
-RadioManager::RadioManager(): HEADER(0xFAebDCcd), HEADER_SIZE(sizeof(long))
+RadioManager::RadioManager(): HEADER(0xFAebDCcd), FOOTER(0xABcdEF00), HEADER_SIZE(sizeof(long))
 {
     m_ttyPortName = "/dev/tty";
     m_ttyPortName += DEFAULT_TTY_PORT_NAME;

@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=microDOAS
-Comment=starts_microDOAS
-Exec=/home/doas/seabreeze/sample-code/cpp/start_microDOAS.sh
-Terminal=true
-Hidden=false
-X-KeepTerminal=true
-Path=/home/doas/seabreeze/sample-code/cpp/
