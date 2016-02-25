@@ -146,6 +146,10 @@ int WriteStdFile()
     c = 0;
     for (i=0; i<20; i++)
     {
+        // this loop is unnecessary if the proper format string is used above
+        // "%15lf" pads the float with spaces so that it takes up 15 chars total
+        // instead use "%lf" and you will get the same precision without the unnecessary padding
+        // - Adam Levy
         if (latstring[i] != ' ')
         {
             latstringshort[c] = latstring[i];
