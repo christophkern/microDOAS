@@ -76,6 +76,7 @@
 #include "radiomanager.cpp"
 //#include "BBBiolib.h"
 #include "leds.cpp"
+#include "crc32.cpp"
 
 
 #ifdef _WIN32
@@ -225,7 +226,7 @@ int main()
     CreateOutputDir();
 
     // set up the radio
-    int serialErrorCode = radio.setUpSerial();
+    int serialErrorCode = radio.open_serial();
     string error = "Radio/serial error: ";
     switch(serialErrorCode){
         case OPEN_SUCCESS:

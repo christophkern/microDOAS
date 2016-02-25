@@ -8,7 +8,11 @@
 
 // big endian architectures need #define __BYTE_ORDER __BIG_ENDIAN
 #ifndef _MSC_VER
+#ifdef __APPLE__            // added by Adam Levy to preserve
+#include <machine/endian.h> // compatibility with mac os x
+#else                      // *
 #include <endian.h>
+#endif                      // *
 #endif
 
 
@@ -317,7 +321,7 @@ namespace
       0xFF6B144A,0x33C114D4,0xBD4E1337,0x71E413A9,0x7B211AB0,0xB78B1A2E,0x39041DCD,0xF5AE1D53,
       0x2C8E0FFF,0xE0240F61,0x6EAB0882,0xA201081C,0xA8C40105,0x646E019B,0xEAE10678,0x264B06E6 }
   };
-
+/*
   inline uint32_t swap(uint32_t x)
   {
 #if defined(__GNUC__) || defined(__clang__)
@@ -332,7 +336,9 @@ namespace
           ((x <<  8) & 0x00FF0000) |
            (x << 24);
   }
+*/
 }
+
 
 
 /// add arbitrary number of bytes

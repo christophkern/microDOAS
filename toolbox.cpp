@@ -288,7 +288,7 @@ int transmitRadioData(){
     // send data and return number of bytes sent
     long numBytes = sizeof(RadioData) - sizeof(float)*(NUM_PIXELS - shifted);
     //return radio.send((byte*)(&data),numBytes);
-    return radio.sendCompressed((byte*)(&data),numBytes);
+    return radio.queue_data((byte*)(&data),numBytes);
 }
 
 void* start_CheckShutdownSwitch(void *arg)
