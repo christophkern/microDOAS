@@ -2,7 +2,7 @@
 #define GLOBALS_H
 
 #include "cconfig.h"
-#include "radiomanager.h"
+#include "radiomanager.hpp"
 
 #define NUM_PIXELS 2048
 
@@ -67,29 +67,5 @@ unsigned long ZipStartFileNumber = 0;
 RadioManager radio;
 // holds all radioData;
 // changing this will mess up how the ground station parses data
-struct RadioData{
-    // gps data
-    float lat;
-    float lon;
-    float alt;
-    float speed;
-    float course;
-    // none of these numbers will be bigger than 255
-    unsigned char num_sats;
-    unsigned char quality;
-    unsigned char year;
-    unsigned char month;
-    unsigned char day;
-    unsigned char hour;
-    unsigned char minute;
-    unsigned char darkMode;
-    unsigned char second;
-    char warnCode;
-
-    // spectrometer data
-    unsigned long fileNum;
-    short exposureTime;
-    unsigned char numExposures;
-    float spec[NUM_PIXELS];
-};
+#include "radiodata.hpp"
 #endif // GLOBALS_H

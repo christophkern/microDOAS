@@ -272,9 +272,6 @@ int transmitRadioData(){
     data.course = Course;
     data.num_sats = Satellites;
     data.quality = Quality;
-    data.year = Year;
-    data.month = Month;
-    data.day = Day;
     data.hour = Hour;
     data.minute = Minute;
     data.second = Second;
@@ -286,7 +283,7 @@ int transmitRadioData(){
 
 
     // send data and return number of bytes sent
-    long numBytes = sizeof(RadioData) - sizeof(float)*(NUM_PIXELS - shifted);
+    long numBytes = sizeof(RadioData);
     //return radio.send((byte*)(&data),numBytes);
     return radio.queue_data((byte*)(&data),numBytes);
 }
