@@ -1,26 +1,26 @@
 <?xml version="1.0" ?>
 <microDOAS>	
-	<Spectrometer>		
-		<MaxExposureTime>1000</MaxExposureTime>
-                <MinExposureTime>10</MinExposureTime>
-		<TargetIntegrationTime>1000</TargetIntegrationTime>
-                <TargetSaturation>0.7</TargetSaturation>
-                <MaxSaturation>0.9</MaxSaturation>
-                <MinSaturation>0.5</MinSaturation>
-		<AutoDetectDark>1</AutoDetectDark>
-		<DarkSaturation>0.15</DarkSaturation>
-		<OffsetExpTime>5</OffsetExpTime>
-		<DarkCurrentExpTime>20000</DarkCurrentExpTime>
-	</Spectrometer>
-	<GPS>
-                <UseGPS>1</UseGPS>
-                <TTYPort>S2</TTYPort>
-		<WaitForLockOnStartup>0</WaitForLockOnStartup>
-		<BaudRate>4800</BaudRate>
-	</GPS>
-	<General>
-		<ZipSpectra>1</ZipSpectra>
-		<DeleteRawSpectraAfterZip>1</DeleteRawSpectraAfterZip>
+    <Spectrometer>
+        <MaxExposureTime>1000</MaxExposureTime>
+        <MinExposureTime>10</MinExposureTime>
+        <TargetIntegrationTime>1000</TargetIntegrationTime>
+        <TargetSaturation>0.7</TargetSaturation>
+        <MaxSaturation>0.9</MaxSaturation>
+        <MinSaturation>0.5</MinSaturation>
+        <AutoDetectDark>1</AutoDetectDark>
+        <DarkSaturation>0.15</DarkSaturation>
+        <OffsetExpTime>5</OffsetExpTime>
+        <DarkCurrentExpTime>20000</DarkCurrentExpTime>
+    </Spectrometer>
+    <GPS>
+        <UseGPS>1</UseGPS>
+        <TTYPort>S2</TTYPort>
+        <WaitForLockOnStartup>0</WaitForLockOnStartup>
+        <BaudRate>9600</BaudRate>
+    </GPS>
+    <General>
+        <ZipSpectra>1</ZipSpectra>
+        <DeleteRawSpectraAfterZip>1</DeleteRawSpectraAfterZip>
         <ZipInterval>1000</ZipInterval>
     </General>
     <Radio>
