@@ -306,8 +306,7 @@ void* start_CheckShutdownSwitch(void *arg)
         fclose(stream);
         if (switchstate == 1)
         {
-            // close radio NOTE might need a radio mutex for this.
-            //radio.closeSerial();
+            radio.close_serial();
 
             switchstr = "echo doas | sudo -S poweroff";
             system(switchstr.c_str());
