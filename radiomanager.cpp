@@ -481,9 +481,9 @@ void RadioManager::write_loop()/*{{{*/
             }
 
             // debug this timeout
-            //size_t send_time = 1e6 * num_bytes_sent / (115200/9);//+100000;
+            size_t send_time = 1e6 * num_bytes_sent / (115200/9);//+100000;
             //cout << "sleep_time " << send_time << endl;   // debug
-            //usleep(send_time);
+            usleep(send_time);
         }
         send_window.clear();
     }
@@ -858,4 +858,14 @@ bool RadioManager::send_in_progress()/*{{{*/
     cout << "num to_ack: " << to_ack.size() << endl;
     cout << "num to_ack_ack: " << to_ack_ack.size() << endl;
     return !(to_send.empty() && to_resend.empty() && send_window.empty() && to_ack_ack.empty() && to_ack.empty());
+}/*}}}*/
+
+size_t RadioManager::queue_size()/*{{{*/
+{
+    to_send_mtx.lock();
+    to_resend_mtx.lock();
+    size_t queue = to_send.size() + to_resend.size() + send_window.size();
+    to_send_mtx.unlock();
+    to_resend_mtx.unlock();
+    return queue;
 }/*}}}*/
