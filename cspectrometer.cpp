@@ -458,7 +458,13 @@ int AcquireSpectrum(int exptime, int numexp)
     if(sendEveryNth > 0){
         if( 0 == (CurrentFileNumber-1)%sendEveryNth || DarkInProgress > 0){
             int bytesSent = transmitRadioData();
-            printf("Sent spectrum %ld in %d bytes \n", (CurrentFileNumber-1), bytesSent);
+            if (bytesSent == -1){
+                printf("Radio not open. \n");
+            } else if (bytesSent == 0){
+                printf("Radio queue too full. \n");
+            } else{
+                printf("Sent spectrum %ld in %d bytes \n", (CurrentFileNumber-1), bytesSent);
+            }
         }
     }
     pthread_mutex_unlock(&gpslock);

@@ -253,43 +253,62 @@ int WriteStdFile()
  *
  */
 int transmitRadioData(){
-    RadioData data;
-    // populate data
-    int shifted = 0;
-    for(int i = 0; i < NUM_PIXELS; i++){
-        bool send = false;
-        // check if the index i is in the specified spectra ranges
-        for( unsigned int j = 0; j < cfg.Radio.start.size(); j++ ){
-            if( cfg.Radio.start[j] <= i && i <= cfg.Radio.end[j] ){
-                send = true;
+    static int avg_size_compressed = sizeof(RadioData);
+    static std::vector<int> compressed_sizes;
+    int size_compressed = 0;
+    if (WarnCode != MODE_COLLECT || radio.queue_size() < 3 * (avg_size_compressed / PKT_DATA_SIZE + 1)){
+        RadioData data;
+
+        data.lat = Latitude;
+        data.lon = Longitude;
+        data.alt = Altitude;
+        data.speed = Speed;
+        data.course = Course;
+        data.num_sats = Satellites;
+        data.quality = Quality;
+        data.hour = Hour;
+        data.minute = Minute;
+        data.second = Second;
+        data.darkMode = DarkInProgress;
+        data.warnCode = WarnCode;
+        data.fileNum = CurrentFileNumber;
+        data.exposureTime = ExposureTime;
+        data.numExposures = NumExposures;
+
+        // populate data
+        for(int i = 0; i < NUM_PIXELS; i++){
+            bool send = false;
+            // check if the index i is in the specified spectra ranges
+            for( unsigned int j = 0; j < cfg.Radio.start.size(); j++ ){
+                if( cfg.Radio.start[j] <= i && i <= cfg.Radio.end[j] ){
+                    send = true;
+                }
+            }
+            if(send){
+                data.spec[i] = Spectrum[i];
             }
         }
-        if(send){
-            data.spec[shifted] = Spectrum[i];
-            shifted++;
+
+        // send data and return number of bytes sent
+        long numBytes = sizeof(RadioData);
+        size_compressed = radio.queue_data((byte*)(&data),numBytes);
+
+        if (size_compressed == -1){
+            return size_compressed;
         }
+        
+        compressed_sizes.push_back(size_compressed);
+        if (compressed_sizes.size() > 5){
+            compressed_sizes.erase(0);
+        }
+
+        int sum = 0;
+        for(int size : compressed_sizes){
+            sum += size;
+        }
+        avg_size_compressed = sum / compressed_sizes.size();
     }
-    data.lat = Latitude;
-    data.lon = Longitude;
-    data.alt = Altitude;
-    data.speed = Speed;
-    data.course = Course;
-    data.num_sats = Satellites;
-    data.quality = Quality;
-    data.hour = Hour;
-    data.minute = Minute;
-    data.second = Second;
-    data.warnCode = WarnCode;
-    data.fileNum = CurrentFileNumber;
-    data.exposureTime = ExposureTime;
-    data.numExposures = NumExposures;
-    data.darkMode = DarkInProgress;
-
-
-    // send data and return number of bytes sent
-    long numBytes = sizeof(RadioData);
-    //return radio.send((byte*)(&data),numBytes);
-    return radio.queue_data((byte*)(&data),numBytes);
+    return size_compressed;
 }
 
 void* start_CheckShutdownSwitch(void *arg)
