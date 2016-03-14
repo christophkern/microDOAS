@@ -253,10 +253,10 @@ int WriteStdFile()
  *
  */
 int transmitRadioData(){
-    static int avg_size_compressed = sizeof(RadioData);
+    static size_t avg_size_compressed = sizeof(RadioData);
     static std::vector<int> compressed_sizes;
     int size_compressed = 0;
-    if (WarnCode != MODE_COLLECT || radio.queue_size() < 3 * (avg_size_compressed / PKT_DATA_SIZE + 1)){
+    if (DarkInProgress != MODE_COLLECT || radio.queue_size() < 3 * (avg_size_compressed / PKT_DATA_SIZE + 1)){
         RadioData data;
 
         data.lat = Latitude;
@@ -299,7 +299,7 @@ int transmitRadioData(){
         
         compressed_sizes.push_back(size_compressed);
         if (compressed_sizes.size() > 5){
-            compressed_sizes.erase(0);
+            compressed_sizes.erase(compressed_sizes.begin());
         }
 
         int sum = 0;
