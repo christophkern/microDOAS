@@ -194,7 +194,7 @@ int WriteStdFile()
         fprintf(stream, "%f\n", Spectrum[i]);
     }
     fprintf(stream, "spec%06lu\n\n\n", CurrentFileNumber);
-//    pthread_mutex_lock(&gpslock);
+//    pthread_mutex_lock(&gpslock); // acquired in calling function
     fprintf(stream, "%02d/%02d/%04d\n", Month, Day, Year);
     fprintf(stream, "%02d:%02d:%02d\n", Hour, Minute, int(round(Second)));
     fprintf(stream, "%02d:%02d:%02d\n", Hour, Minute, int(round(Second)));
@@ -256,7 +256,8 @@ int transmitRadioData(){
     static size_t avg_size_compressed = sizeof(RadioData);
     static std::vector<int> compressed_sizes;
     int size_compressed = 0;
-    if (DarkInProgress != MODE_COLLECT || radio.queue_size() < 3 * (avg_size_compressed / PKT_DATA_SIZE + 1)){
+    if ((DarkInProgress != MODE_COLLECT && DarkInProgress != MODE_SHUTTER_CLOSED ) || 
+        radio.queue_size() < 4 * (avg_size_compressed / PKT_DATA_SIZE + 1)){
         RadioData data;
 
         data.lat = Latitude;
