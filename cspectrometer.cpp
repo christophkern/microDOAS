@@ -461,7 +461,7 @@ int AcquireSpectrum(int exptime, int numexp)
             if (bytesSent == -1){
                 printf("Radio not open. \n");
             } else if (bytesSent == 0){
-                printf("Radio queue too full. \n");
+                printf("Radio not sending or queue too full. \n");
             } else{
                 printf("Sent spectrum %ld in %d bytes \n", (CurrentFileNumber-1), bytesSent);
             }
