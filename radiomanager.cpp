@@ -124,7 +124,7 @@ RadioManager::RadioManager(): HEADER(HEADER_HEX),FOOTER(FOOTER_HEX)/*{{{*/
     m_port_name = DEFAULT_TTY_PORT_NAME;
 
     is_open = false;
-    stop_sending = false;
+    stop_sending = true;
     m_wfd = -1;
     m_rfd = -1;
     num_pkts = 0;       // debug
